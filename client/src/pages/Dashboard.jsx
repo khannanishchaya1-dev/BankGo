@@ -24,10 +24,10 @@ export default function Dashboard() {
   const interval = setInterval(() => {
     index = (index + 1) % cards.length;
 
-    cards[index].scrollIntoView({
-      behavior: "smooth",
-      inline: "center",
-    });
+    container.scrollTo({
+  left: cards[index].offsetLeft,
+  behavior: "smooth",
+});
 
     setActiveIndex(index);
   }, 1500);
@@ -68,6 +68,11 @@ export default function Dashboard() {
     Logout
   </button>
 </div>
+{/* Security + Last Login Info */}
+<div className="flex justify-between items-center bg-white/5 rounded-xl px-4 py-3 mb-6 text-xs text-indigo-200">
+  <span>Last Login: Today, 10:42 AM</span>
+  <span className="text-green-400 font-medium">Secure Session 🔐</span>
+</div>
 
       {/* Balance Card */}
 <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 shadow-2xl mb-8">
@@ -84,6 +89,7 @@ export default function Dashboard() {
     </button>
   </div>
 
+
   {/* Balance */}
   <h1 className="text-3xl font-bold mt-4 tracking-wide">
     {showBalance ? "₹ 1,25,000.00" : "₹ ••••••"}
@@ -95,36 +101,11 @@ export default function Dashboard() {
       Account No: {showBalance ? "**** 4589" : "**** ****"}
     </span>
     <span>Savings</span>
+    
   </div>
 </div>
-      {/* Quick Actions */}
-     {/* Quick Actions */}
-<div>
-  <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
 
-  <div className="grid grid-cols-3 gap-4">
-
-    {/* Transfer */}
-    <div className="bg-white/10 rounded-2xl p-4 flex flex-col items-center justify-center shadow-lg hover:bg-white/20 transition cursor-pointer">
-      <span className="text-2xl">💸</span>
-      <p className="text-xs mt-2 text-center">Transfer</p>
-    </div>
-
-    {/* History */}
-    <div className="bg-white/10 rounded-2xl p-4 flex flex-col items-center justify-center shadow-lg hover:bg-white/20 transition cursor-pointer">
-      <span className="text-2xl">📄</span>
-      <p className="text-xs mt-2 text-center">History</p>
-    </div>
-
-    {/* Open Account */}
-    <div className="bg-white/10 rounded-2xl p-4 flex flex-col items-center justify-center shadow-lg hover:bg-white/20 transition cursor-pointer">
-      <span className="text-2xl">🏦</span>
-      <p className="text-xs mt-2 text-center">Open Account</p>
-    </div>
-
-  </div>
-</div>
-      
+     
       {/* New Offers Section */}
 {/* New Offers Section */}
 <div className="mt-10">
@@ -223,7 +204,7 @@ export default function Dashboard() {
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
 
       <div className="absolute bottom-6 left-6 right-6">
-        <h4 className="text-xl font-bold">Unlock Premium Card Benefits 💳</h4>
+        <h4 className="text-xl font-bold">Unlock Premium Card Benefits </h4>
         <p className="text-sm text-gray-200 mt-2">
           Extra rewards, lounge access & exclusive lifestyle offers.
         </p>
@@ -245,6 +226,70 @@ export default function Dashboard() {
     />
   ))}
 </div>
+
+{/* Quick Actions */}
+     {/* Quick Actions */}
+<div>
+  <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
+
+  <div className="grid grid-cols-3 gap-4">
+
+    {/* Transfer */}
+    <div className="bg-white/10 rounded-2xl p-4 flex flex-col items-center justify-center shadow-lg hover:bg-white/20 transition cursor-pointer">
+      <span className="text-2xl">💸</span>
+      <p className="text-xs mt-2 text-center">Transfer</p>
+    </div>
+
+    {/* History */}
+    <div className="bg-white/10 rounded-2xl p-4 flex flex-col items-center justify-center shadow-lg hover:bg-white/20 transition cursor-pointer">
+      <span className="text-2xl">📄</span>
+      <p className="text-xs mt-2 text-center">History</p>
+    </div>
+
+    {/* Open Account */}
+    <div onClick={() => navigate('/open-account')} className="bg-white/10 rounded-2xl p-4 flex flex-col items-center justify-center shadow-lg hover:bg-white/20 transition cursor-pointer">
+      <span className="text-2xl">🏦</span>
+      <p className="text-xs mt-2 text-center">Open Account</p>
+    </div>
+
+  </div>
+</div>
+      
+
+{/* Support Section */}
+<div className="mt-10 bg-gradient-to-r from-pink-500/20 to-purple-500/20 rounded-2xl p-4 text-sm flex justify-between items-center">
+  <div>
+    <p className="font-semibold">Need Assistance?</p>
+    <p className="text-indigo-200 text-xs">
+      Our support team is available 24/7
+    </p>
+  </div>
+  <button className="bg-white/20 px-4 py-2 rounded-xl text-xs hover:bg-white/30 transition">
+    Contact Support
+  </button>
+</div>
+{/* Footer */}
+<footer className="mt-12 pt-6 border-t border-white/10 text-center text-xs text-indigo-300 space-y-2">
+
+  <p>© {new Date().getFullYear()} BankGo. All rights reserved.</p>
+
+  <div className="flex justify-center gap-6">
+    <span className="hover:text-white cursor-pointer transition">
+      Privacy Policy
+    </span>
+    <span className="hover:text-white cursor-pointer transition">
+      Terms of Service
+    </span>
+    <span className="hover:text-white cursor-pointer transition">
+      Help & Support
+    </span>
+  </div>
+
+  <p className="text-indigo-400 text-[10px]">
+    Secure Digital Banking Platform
+  </p>
+
+</footer>
 
     </div>
   );
