@@ -104,7 +104,7 @@ useEffect(() => {
 
   if (step === "processing") {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-800 flex items-center justify-center px-6 text-white">
+    <div className="h-[100dvh] bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-800 flex items-center justify-center px-6 text-white">
 
       <div className="text-center">
 

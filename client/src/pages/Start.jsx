@@ -6,7 +6,7 @@ export default function Start() {
 
   return (
     <div
-      className="min-h-screen bg-cover bg-center relative flex flex-col justify-end"
+      className="h-[100dvh] bg-cover bg-center relative flex flex-col justify-end"
       style={{ backgroundImage: "url('/bank-bg.avif')" }}
     >
       {/* Dark Overlay */}

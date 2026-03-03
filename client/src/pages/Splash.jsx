@@ -56,7 +56,7 @@ export default function Splash() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-800 text-white flex flex-col">
+    <div className="h-[100dvh] bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-800 text-white flex flex-col">
       <div className="flex-1 flex flex-col justify-between px-6 py-10">
 
         {/* Logo */}

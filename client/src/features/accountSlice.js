@@ -46,9 +46,9 @@ export const createAccount = createAsyncThunk(
           },
         }
       );
-
+console.log("Create Account Response:", response.data); // 
       // assuming backend returns { account: {...} }
-      return response.data.account;
+      return response.data;
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "Account creation failed"

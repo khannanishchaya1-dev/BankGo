@@ -44,7 +44,6 @@ export default function OpenAccount() {
       setStatus("loading");
 
       const result = await dispatch(createAccount(form)).unwrap();
-
       setGeneratedAccount(result);
       setStatus("success");
 
@@ -58,7 +57,7 @@ export default function OpenAccount() {
 
   if (status === "loading") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-800 flex items-center justify-center text-white">
+      <div className="h-[100dvh] bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-800 flex items-center justify-center text-white">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-white/20 border-t-pink-400 rounded-full animate-spin mx-auto"></div>
           <h2 className="mt-6 text-xl font-semibold">
@@ -99,7 +98,7 @@ export default function OpenAccount() {
             </p>
 
             <p className="text-2xl font-bold tracking-widest mt-3">
-              {generatedAccount.accountNumber}
+              {generatedAccount?.accountNumber}
             </p>
 
             <p className="text-xs text-indigo-300 mt-2">

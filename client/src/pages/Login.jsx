@@ -37,7 +37,7 @@ useEffect(() => {
   }
 }, [isAuthenticated, navigate]);
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-800 px-6 py-10 text-white">
+    <div className="h-[100dvh] bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-800 px-6 py-10 text-white">
 
       {/* Logo Section */}
       <div className="text-center mt-6 mb-10">
