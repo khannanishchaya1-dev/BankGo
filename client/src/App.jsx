@@ -7,6 +7,8 @@ import Dashboard from './pages/Dashboard'
 import UserProtectWrapper from './pages/UserProtectWrapper'
 import{Route,Routes,Link} from 'react-router-dom';
 import OpenAccount from './pages/OpenAccount';
+import Transfer from './pages/Transfer';
+import History from './pages/History';
 
 function App() {
   
@@ -19,6 +21,8 @@ function App() {
       <Route path='/login' element={<Login/>}/>
       <Route path='/dashboard' element={<UserProtectWrapper><Dashboard/></UserProtectWrapper>}/>
       <Route path='/open-account' element={<UserProtectWrapper><OpenAccount/></UserProtectWrapper>}/>
+      <Route path='/transfer' element={<UserProtectWrapper><Transfer/></UserProtectWrapper>}/>
+      <Route path='/history' element={<UserProtectWrapper><History/></UserProtectWrapper>}/>
     </Routes>
       
     </>

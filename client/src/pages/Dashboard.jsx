@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { logoutUser } from "../features/authSlice";
 import { useState } from "react";
 import { useRef, useEffect } from "react";
+import { fetchAccounts } from "../features/accountSlice";
+import axios from "axios";
 
 export default function Dashboard() {
   const { user } = useSelector((state) => state.auth);
@@ -12,7 +14,49 @@ export default function Dashboard() {
   const [showBalance, setShowBalance] = useState(true);
   const offerRef = useRef(null);
   const [activeIndex, setActiveIndex] = React.useState(0);
+  const balanceRef = useRef(null);
+const [activeBalanceIndex, setActiveBalanceIndex] = useState(0);
+  const { accounts, activeAccount, loading } = useSelector(
+  (state) => state.account
+);
+  const [refreshingId, setRefreshingId] = useState(null);
 
+useEffect(() => {
+  dispatch(fetchAccounts());
+}, [dispatch]);
+
+
+
+const handleRefreshBalance = async (accountId) => {
+  try {
+    setRefreshingId(accountId);
+
+    const response = await axios.get(
+      `${import.meta.env.VITE_BASE_API_URL}/api/auth/fetch-balance/${accountId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    const data = await response.data;
+    console.log(`Balance refresh response for account ${accountId}:`, data);
+   
+    // Update only that account’s balance in Redux state
+    dispatch({
+      type: "account/updateBalance",
+      payload: {
+        accountId,
+        balance: data.balance,
+      },
+    });
+  } catch (error) {
+    console.error("Balance refresh failed:", error.message);
+  } finally {
+    setRefreshingId(null);
+  }
+};
 
   useEffect(() => {
   const container = offerRef.current;
@@ -30,7 +74,7 @@ export default function Dashboard() {
 });
 
     setActiveIndex(index);
-  }, 1500);
+  }, 2000);
 
   return () => clearInterval(interval);
 }, []);
@@ -74,35 +118,111 @@ export default function Dashboard() {
   <span className="text-green-400 font-medium">Secure Session 🔐</span>
 </div>
 
-      {/* Balance Card */}
-<div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 shadow-2xl mb-8">
+    <div className="mb-8">
 
-  {/* Header Row */}
-  <div className="flex justify-between items-center">
-    <p className="text-indigo-200 text-sm">Available Balance</p>
+  {loading ? (
+  <p className="text-sm text-indigo-300">
+    Fetching your accounts...
+  </p>
+) : accounts.length === 0 ? (
+  <p className="text-sm text-indigo-300">
+    No accounts found.
+  </p>
+) : (
 
-    <button
-      onClick={() => setShowBalance(!showBalance)}
-      className="text-sm bg-white/10 px-3 py-1 rounded-lg hover:bg-white/20 transition"
-    >
-      {showBalance ? "🙈 Hide" : "👁 Show"}
-    </button>
+  <div
+    ref={balanceRef}
+    className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-4"
+    onScroll={(e) => {
+      const scrollLeft = e.target.scrollLeft;
+      const width = e.target.clientWidth;
+      const index = Math.round(scrollLeft / width);
+      setActiveBalanceIndex(index);
+    }}
+  >
+
+    {accounts.map((account) => {
+
+      const formattedAccountNumber = account.accountNumber
+        ?.toString()
+        .replace(/(\d{4})(?=\d)/g, "$1 ");
+
+      return (
+        <div
+          key={account._id}
+          className="min-w-full snap-center bg-white/10 backdrop-blur-lg rounded-3xl p-6 shadow-2xl"
+        >
+
+          {/* Header */}
+          <div className="flex justify-between items-center">
+
+            <p className="text-indigo-200 text-sm">
+              Available Balance
+            </p>
+
+            <div className="flex items-center gap-2">
+
+              <button
+                onClick={() => setShowBalance(!showBalance)}
+                className="text-sm bg-white/10 px-3 py-1 rounded-lg hover:bg-white/20 transition"
+              >
+                {showBalance ? "🙈 Hide" : "👁 Show"}
+              </button>
+
+              <button
+                onClick={() => handleRefreshBalance(account._id)}
+                className="text-sm bg-white/10 px-3 py-1 rounded-lg hover:bg-white/20 transition"
+              >
+                🔄
+              </button>
+
+            </div>
+          </div>
+
+          {/* Balance */}
+          <h1 className="text-3xl font-bold mt-4 tracking-wide transition-all duration-300">
+            {showBalance
+              ? `₹ ${Number(account?.balance || 0).toLocaleString("en-IN", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                })}`
+              : "₹ ••••••"}
+          </h1>
+
+          {/* Account Details */}
+          <div className="flex justify-between mt-6 text-sm text-indigo-200">
+            <span>
+              Account No:{" "}
+              {showBalance
+                ? formattedAccountNumber
+                : "XXXX XXXX XXXX"}
+            </span>
+
+            <span>{account.type}</span>
+          </div>
+
+        </div>
+      );
+    })}
+
   </div>
+)}
+  {/* Pagination Dots */}
+  {accounts.length > 1 && (
+    <div className="flex justify-center mt-4 gap-2">
+      {accounts.map((_, i) => (
+        <div
+          key={i}
+          className={`h-2 rounded-full transition-all duration-300 ${
+            activeBalanceIndex === i
+              ? "w-6 bg-white"
+              : "w-2 bg-white/40"
+          }`}
+        />
+      ))}
+    </div>
+  )}
 
-
-  {/* Balance */}
-  <h1 className="text-3xl font-bold mt-4 tracking-wide">
-    {showBalance ? "₹ 1,25,000.00" : "₹ ••••••"}
-  </h1>
-
-  {/* Account Details */}
-  <div className="flex justify-between mt-6 text-sm text-indigo-200">
-    <span>
-      Account No: {showBalance ? "**** 4589" : "**** ****"}
-    </span>
-    <span>Savings</span>
-    
-  </div>
 </div>
 
      
@@ -235,13 +355,13 @@ export default function Dashboard() {
   <div className="grid grid-cols-3 gap-4">
 
     {/* Transfer */}
-    <div className="bg-white/10 rounded-2xl p-4 flex flex-col items-center justify-center shadow-lg hover:bg-white/20 transition cursor-pointer">
+    <div onClick={() => navigate('/transfer')} className="bg-white/10 rounded-2xl p-4 flex flex-col items-center justify-center shadow-lg hover:bg-white/20 transition cursor-pointer">
       <span className="text-2xl">💸</span>
       <p className="text-xs mt-2 text-center">Transfer</p>
     </div>
 
     {/* History */}
-    <div className="bg-white/10 rounded-2xl p-4 flex flex-col items-center justify-center shadow-lg hover:bg-white/20 transition cursor-pointer">
+    <div onClick={() => navigate('/history')} className="bg-white/10 rounded-2xl p-4 flex flex-col items-center justify-center shadow-lg hover:bg-white/20 transition cursor-pointer">
       <span className="text-2xl">📄</span>
       <p className="text-xs mt-2 text-center">History</p>
     </div>
