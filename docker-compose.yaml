@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  frontend:
+    build: ./client
+    ports:
+      - "5173:5173"
+    env_file:
+      - ./client/.env
+    environment:
+      - VITE_BASE_API_URL=http://backend-ledger:3000
+    networks:
+      - bankGo
+
+  backend-ledger:
+    build: ./Backend-Ledger
+    ports:
+      - "3000:3000"
+    networks:
+      - bankGo
+    env_file:
+      - ./Backend-Ledger/.env
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - bankGo
+
+networks:
+  bankGo:
+    driver: bridge
+
+volumes:
+  mongo-data:

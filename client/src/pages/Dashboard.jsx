@@ -42,7 +42,7 @@ const handleRefreshBalance = async (accountId) => {
 
     const data = await response.data;
     console.log(`Balance refresh response for account ${accountId}:`, data);
-   
+   ``
     // Update only that account’s balance in Redux state
     dispatch({
       type: "account/updateBalance",
